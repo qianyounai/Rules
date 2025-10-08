@@ -1,0 +1,165 @@
+name: Convert List to MRS and YAML
+
+on:
+  push:
+    paths:
+      - '**.list'
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download latest mihomo
+        run: |
+          # 获取最新版本
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+          echo "Latest mihomo version: $LATEST_VERSION"
+          
+          # 下载对应架构的版本
+          wget -q "https://github.com/MetaCubeX/mihomo/releases/download/${LATEST_VERSION}/mihomo-linux-amd64-${LATEST_VERSION}.gz"
+          gunzip "mihomo-linux-amd64-${LATEST_VERSION}.gz"
+          mv "mihomo-linux-amd64-${LATEST_VERSION}" mihomo
+          chmod +x mihomo
+          
+          # 验证版本
+          ./mihomo -v
+
+      - name: Convert list files to yaml and mrs
+        run: |
+          # 创建转换脚本
+          cat > convert.sh << 'EOF'
+          #!/bin/bash
+          
+          process_list_file() {
+              local list_file="$1"
+              local base_name="${list_file%.list}"
+              local yaml_file="${base_name}.yaml"
+              local mrs_file="${base_name}.mrs"
+              
+              echo "Processing: $list_file"
+              
+              # 初始化分类数组
+              declare -a domains
+              declare -a ip_cidrs
+              
+              # 读取并分类 list 文件内容
+              while IFS= read -r line || [ -n "$line" ]; do
+                  # 跳过空行和注释行
+                  [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+                  
+                  # 跳过 DOMAIN-KEYWORD 和 PROCESS-NAME 规则
+                  if [[ "$line" =~ ^DOMAIN-KEYWORD, ]] || [[ "$line" =~ ^PROCESS-NAME, ]]; then
+                      continue
+                  fi
+                  
+                  # 去除前后空格
+                  line=$(echo "$line" | xargs)
+                  
+                  # 判断规则类型并处理
+                  if [[ "$line" =~ ^IP-CIDR6?, ]]; then
+                      # IP-CIDR 或 IP-CIDR6 规则
+                      ip=$(echo "$line" | sed -E 's/^IP-CIDR6?,//i' | xargs)
+                      if [[ -n "$ip" ]]; then
+                          ip_cidrs+=("$ip")
+                      fi
+                  elif [[ "$line" =~ ^DOMAIN-SUFFIX, ]]; then
+                      # DOMAIN-SUFFIX 规则，转换为 +.domain.com 格式
+                      domain=$(echo "$line" | sed -E 's/^DOMAIN-SUFFIX,//i' | xargs)
+                      if [[ -n "$domain" ]]; then
+                          domains+=("+.$domain")
+                      fi
+                  elif [[ "$line" =~ ^(DOMAIN|DOMAIN-KEYWORD), ]]; then
+                      # DOMAIN 规则
+                      domain=$(echo "$line" | sed -E 's/^DOMAIN,//i' | xargs)
+                      if [[ -n "$domain" ]]; then
+                          domains+=("$domain")
+                      fi
+                  elif [[ "$line" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(/[0-9]+)?$ ]] || \
+                       [[ "$line" =~ ^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}(/[0-9]+)?$ ]]; then
+                      # 纯 IP 地址或 CIDR（没有前缀）
+                      ip_cidrs+=("$line")
+                  else
+                      # 纯域名（没有前缀）
+                      if [[ -n "$line" ]]; then
+                          domains+=("$line")
+                      fi
+                  fi
+              done < "$list_file"
+              
+              # 生成 YAML 文件
+              echo "payload:" > "$yaml_file"
+              
+              if [ ${#domains[@]} -gt 0 ]; then
+                  for domain in "${domains[@]}"; do
+                      echo "  - '$domain'" >> "$yaml_file"
+                  done
+              fi
+              
+              if [ ${#ip_cidrs[@]} -gt 0 ]; then
+                  for ip in "${ip_cidrs[@]}"; do
+                      echo "  - '$ip'" >> "$yaml_file"
+                  done
+              fi
+              
+              echo "Created: $yaml_file"
+              
+              # 使用 mihomo 将 YAML 转换为 MRS
+              if [ -f "$yaml_file" ]; then
+                  # 确定规则类型
+                  if [ ${#domains[@]} -gt 0 ] && [ ${#ip_cidrs[@]} -eq 0 ]; then
+                      rule_type="domain"
+                  elif [ ${#ip_cidrs[@]} -gt 0 ] && [ ${#domains[@]} -eq 0 ]; then
+                      rule_type="ipcidr"
+                  else
+                      rule_type="domain"  # 混合类型默认为 domain
+                  fi
+                  
+                  ./mihomo convert-ruleset "$rule_type" yaml "$yaml_file" "$mrs_file"
+                  
+                  if [ -f "$mrs_file" ]; then
+                      echo "Created: $mrs_file (type: $rule_type)"
+                  else
+                      echo "Failed to create: $mrs_file"
+                  fi
+              fi
+              
+              echo "---"
+          }
+          
+          # 查找所有 .list 文件并处理
+          find . -name "*.list" -type f | while read -r file; do
+              process_list_file "$file"
+          done
+          EOF
+          
+          chmod +x convert.sh
+          ./convert.sh
+
+      - name: Clean up temporary files
+        run: |
+          # 删除临时文件
+          rm -f mihomo convert.sh
+          echo "Cleaned up temporary files"
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # 只添加 .mrs 和 .yaml 文件
+          git add '*.mrs' '*.yaml'
+          
+          # 检查是否有变化
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-generate MRS and YAML files from list files"
+            git push
+          fi
