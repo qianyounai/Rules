@@ -1,0 +1,13 @@
+payload:
+  - '*'
+  - '+.lan'
+  - '+.local'
+  - '+.localhost'
+  - '+.msftncsi.com'
+  - '+.msftconnecttest.com'
+  - 'xbox.*.microsoft.com'
+  - '*.xboxlive.com'
+  - '+.stun.*.*'
+  - '+.stun.*.*.*'
+  - '+.stun.*.*.*.*'
+  - '+.stun.*.*.*.*.*'
