@@ -70,4 +70,3 @@ payload:
   - 'time6.*.com'
   - 'time7.*.com'
   - 'xbox.*.*.microsoft.com'
-  - 'xnotify.xboxlive.com'
