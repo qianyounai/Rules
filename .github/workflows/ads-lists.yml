@@ -5,7 +5,6 @@ on:
     # 每天 UTC 时间 0 点运行（北京时间 8 点）
     - cron: '0 0 * * *'
   workflow_dispatch:  # 允许手动触发
-
 jobs:
   merge-lists:
     runs-on: ubuntu-latest
@@ -74,7 +73,7 @@ jobs:
             git add Ads.list
             git commit -m "Update Ads.list - $(date +'%Y-%m-%d %H:%M:%S')"
             git push
-            echo "已提交更新Ads.list"
+            echo "已提交更新"
           else
             echo "没有检测到变化"
           fi
