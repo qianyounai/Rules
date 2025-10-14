@@ -1,0 +1,73 @@
+name: Ads List
+
+on:
+  schedule:
+    # 每天 UTC 时间 0 点运行（北京时间 8 点）
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  merge-lists:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Download and merge list files
+        run: |
+          # 定义要下载的 URL 列表
+          urls=(
+            "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/adobe-ads%40ads.list"
+            "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/baidu-ads%40ads.list"
+            "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/google-ads%40ads.list"
+          )
+          
+          # 清空或创建输出文件
+          > Ads.list
+          
+          # 遍历每个 URL
+          for url in "${urls[@]}"; do
+            # 提取文件名（去掉 .list 后缀）
+            filename=$(basename "$url" | sed 's/%40/@/g' | sed 's/.list$//')
+            
+            echo "正在下载: $filename"
+            
+            # 下载文件到临时文件
+            if curl -sSL "$url" -o temp.list; then
+              # 添加空行（如果不是第一个文件）
+              if [ -s Ads.list ]; then
+                echo "" >> Ads.list
+              fi
+              
+              # 添加注释
+              echo "# $filename" >> Ads.list
+              
+              # 追加文件内容
+              cat temp.list >> Ads.list
+              
+              echo "✓ 已合并: $filename"
+            else
+              echo "✗ 下载失败: $filename"
+            fi
+          done
+          
+          # 清理临时文件
+          rm -f temp.list
+          
+          echo "合并完成！"
+          
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # 检查是否有变化
+          if git diff --quiet Ads.list; then
+            echo "没有检测到变化"
+          else
+            git add Ads.list
+            git commit -m "Update Ads.list - $(date +'%Y-%m-%d %H:%M:%S')"
+            git push
+            echo "已提交更新"
+          fi
