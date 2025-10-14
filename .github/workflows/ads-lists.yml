@@ -39,7 +39,8 @@ jobs:
             if curl -sSL "$url" -o temp.list; then
               # 如果不是第一个文件，添加空行
               if [ "$first_file" = false ]; then
-                echo "" >> Ads.list
+                echo "
+                " >> Ads.list
               fi
               
               # 添加文件名注释
