@@ -26,6 +26,9 @@ jobs:
           # 清空或创建输出文件
           > Ads.list
           
+          # 标记是否是第一个文件
+          first_file=true
+          
           # 遍历每个 URL
           for url in "${urls[@]}"; do
             # 提取文件名（去掉 .list 后缀）
@@ -35,18 +38,22 @@ jobs:
             
             # 下载文件到临时文件
             if curl -sSL "$url" -o temp.list; then
-              # 添加空行（如果不是第一个文件）
-              if [ -s Ads.list ]; then
+              # 如果不是第一个文件，添加空行
+              if [ "$first_file" = false ]; then
                 echo "" >> Ads.list
               fi
               
-              # 添加注释
+              # 添加文件名注释
               echo "# $filename" >> Ads.list
+              
+              # 添加 URL
+              echo "# $url" >> Ads.list
               
               # 追加文件内容
               cat temp.list >> Ads.list
               
               echo "✓ 已合并: $filename"
+              first_file=false
             else
               echo "✗ 下载失败: $filename"
             fi
