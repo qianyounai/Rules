@@ -2,6 +2,7 @@
 # https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/adobe-ads%40ads.list
 +.advertising.adobe.com
 +.tubemogul.com
+      
 # baidu-ads@ads
 # https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/baidu-ads%40ads.list
 +.a.baidu.com
@@ -160,6 +161,7 @@
 +.znsv.baidu.com
 +.zz.bdstatic.com
 +.zzy1.quyaoya.com
+      
 # google-ads@ads
 # https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/google-ads%40ads.list
 +.2mdn-cn.net
