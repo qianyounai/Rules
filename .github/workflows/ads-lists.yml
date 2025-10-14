@@ -36,7 +36,7 @@ jobs:
           )
           
           # 清空或创建输出文件
-          > Ads.list
+          > Ads_D.list
           
           # 标记是否是第一个文件
           first_file=true
@@ -53,17 +53,17 @@ jobs:
               # 如果不是第一个文件，添加空行
               if [ "$first_file" = false ]; then
                 echo "
-                " >> Ads.list
+                " >> Ads_D.list
               fi
               
               # 添加文件名注释
-              echo "# $filename" >> Ads.list
+              echo "# $filename" >> Ads_D.list
               
               # 添加 URL
-              echo "# $url" >> Ads.list
+              echo "# $url" >> Ads_D.list
               
               # 追加文件内容
-              cat temp.list >> Ads.list
+              cat temp.list >> Ads_D.list
               
               echo "✓ 已合并: $filename"
               first_file=false
@@ -82,10 +82,10 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 如果 Ads.list 是新文件或有变化，则添加并提交
-          if [ ! -f Ads.list ] || ! git diff --quiet Ads.list || git ls-files --others --exclude-standard | grep -q "Ads.list"; then
-            git add Ads.list
-            git commit -m "Update Ads.list - $(date +'%Y-%m-%d %H:%M:%S')"
+          # 如果 Ads_D.list 是新文件或有变化，则添加并提交
+          if [ ! -f Ads_D.list ] || ! git diff --quiet Ads_D.list || git ls-files --others --exclude-standard | grep -q "Ads_D.list"; then
+            git add Ads_D.list
+            git commit -m "Update Ads_D.list - $(date +'%Y-%m-%d %H:%M:%S')"
             git push
             echo "已提交更新"
           else
