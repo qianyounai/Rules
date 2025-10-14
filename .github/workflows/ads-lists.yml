@@ -1,17 +1,25 @@
 name: Ads List
 
 on:
+  workflow_dispatch:
+  # 每天 22:00 触发一次
   schedule:
-    # 每天 UTC 时间 0 点运行（北京时间 8 点）
-    - cron: '0 0 * * *'
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 6 * * *'
+  push:
+    branches:
+      - main
+
 jobs:
-  merge-lists:
+  build:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
     steps:
-      - name: Checkout repository
+      - name: Add token
         uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Download and merge list files
         run: |
