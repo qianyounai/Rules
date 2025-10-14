@@ -324,3 +324,48 @@ analytics.google.com
 +.iadmusicmat.music.126.net
 +.iadmusicmatvideo.music.126.net
 +.sentry.music.163.com
+      
+# tencent-ads@ads
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tencent-ads%40ads.list
++.ad.qq.com
++.ad.qun.qq.com
++.adfilter.imtt.qq.com
++.adping.qq.com
++.adpm.app.qq.com
++.adsclick.qq.com
++.adsfile.qq.com
++.adshmmsg.qq.com
++.adslvfile.qq.com
++.adslvseed.qq.com
++.adsmind.apdcdn.tc.qq.com
++.adsqqclick.qq.com
++.adstestview.qq.com
++.adsview.qq.com
++.adsview2.qq.com
++.adv.app.qq.com
++.adver.qq.com
++.beacon.qq.com
++.beaconcdn.qq.com
++.btrace.qq.com
++.e.qq.com
++.gdt.qq.com
++.isdspeed.qq.com
++.log.tbs.qq.com
++.mpush.qq.com
++.mtrace.qq.com
++.pgdt.gtimg.cn
++.pingjs.qq.com
++.push.qq.com
++.sngmta.qq.com
++.stat.y.qq.com
++.tajs.qq.com
++.tcss.qq.com
++.trace.qq.com
++.ugdtimg.com
++.wit.qq.com
+      
+# yahoo-ads@ads
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/yahoo-ads%40ads.list
++.ads.yahoo.com
++.gemini.yahoo.com
++.ysm.yahoo.com
