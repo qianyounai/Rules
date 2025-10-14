@@ -62,12 +62,12 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 检查是否有变化
-          if git diff --quiet Ads.list; then
-            echo "没有检测到变化"
-          else
+          # 如果 Ads.list 是新文件或有变化，则添加并提交
+          if [ ! -f Ads.list ] || ! git diff --quiet Ads.list || git ls-files --others --exclude-standard | grep -q "Ads.list"; then
             git add Ads.list
             git commit -m "Update Ads.list - $(date +'%Y-%m-%d %H:%M:%S')"
             git push
             echo "已提交更新"
+          else
+            echo "没有检测到变化"
           fi
