@@ -1,10 +1,35 @@
+# category-ads-all
+# https://raw.githubusercontent.com/qianyounai/Geo-Rules/main/category-ads-all.list
++.7box.vip
++.ad-delivery.net
++.adinplay.com
++.adnxs.com
++.ads.trafficjunky.net
++.advertserve.com
++.casalemedia.com
++.contextual.media.net
++.cpmstar.com
++.demdex.net
++.httpool.com
++.lijit.com
++.1rx.io
++.mfadsrvr.com
++.mgid.com
++.ns1p.net
++.pubmatic.com
++.snapads.com
++.spotxchange.com
++.unimhk.com
++.upapi.net
+
+      
 # adobe-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/adobe-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/adobe-ads%40ads.list
 +.advertising.adobe.com
 +.tubemogul.com
       
 # alibaba-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/alibaba-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/alibaba-ads%40ads.list
 +.a.alimama.cn
 +.acjs.aliyun.com
 +.adash-c.m.taobao.com
@@ -105,7 +130,7 @@
 +.yiliao.hupan.com
       
 # baidu-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/baidu-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/baidu-ads%40ads.list
 +.a.baidu.com
 +.ad.duapps.com
 +.ad.player.baidu.com
@@ -264,7 +289,7 @@
 +.zzy1.quyaoya.com
       
 # google-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/google-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google-ads%40ads.list
 +.2mdn-cn.net
 +.2mdn.net
 +.admob-cn.com
@@ -311,7 +336,7 @@
 analytics.google.com
       
 # netease-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/netease-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netease-ads%40ads.list
 +.a.youdao.com
 +.admusicpic.music.126.net
 +.ads.music.126.net
@@ -326,7 +351,7 @@ analytics.google.com
 +.sentry.music.163.com
       
 # tencent-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tencent-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tencent-ads%40ads.list
 +.ad.qq.com
 +.ad.qun.qq.com
 +.adfilter.imtt.qq.com
@@ -365,7 +390,7 @@ analytics.google.com
 +.wit.qq.com
       
 # yahoo-ads@ads
-# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/yahoo-ads%40ads.list
+# https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/yahoo-ads%40ads.list
 +.ads.yahoo.com
 +.gemini.yahoo.com
 +.ysm.yahoo.com
