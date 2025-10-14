@@ -67,7 +67,7 @@ jobs:
             git add Ads.list
             git commit -m "Update Ads.list - $(date +'%Y-%m-%d %H:%M:%S')"
             git push
-            echo "已提交Ads.list更新"
+            echo "已提交更新Ads.list"
           else
             echo "没有检测到变化"
           fi
